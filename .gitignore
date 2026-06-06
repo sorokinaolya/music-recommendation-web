@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# Node / frontend deps
+node_modules/
+
+# Local databases
+*.sqlite3
+*.db
+app_data.sqlite3
+back/app_data.sqlite3
+
+# Model artifacts / heavy files
+back/artifacts/*
+!back/artifacts/.gitkeep
+artifacts/
+*.pkl
+*.npz
+*.npy
+*.parquet
+*.zip
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodTune — Музыка для твоего настроения</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<header class="header">
+  <div class="logo">🎵 MoodTune</div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showSection('home')">Главная</button>
+    <button class="nav-btn" onclick="showSection('profile')">Профиль</button>
+    <button class="nav-btn" onclick="showSection('history')">История</button>
+    <button class="nav-btn" onclick="showSection('favorites')">Избранное</button>
+  </nav>
+  <div class="user-area">
+    <div id="userBlock" style="display:none">
+      <span id="userName" class="user-name"></span>
+      <button class="btn-small" onclick="logout()">Выйти</button>
+    </div>
+    <button class="btn-login" id="loginBtn" onclick="openModal('loginModal')">
+    Войти
+    </button> 
+  </div>
+</header>
+
+
+<section id="home" class="section active">
+  <div class="hero">
+    <div class="hero-text">
+      <p class="hero-label">Умная система рекомендаций</p>
+      <h1 class="hero-title">Музыка, которая<br><em>чувствует тебя</em></h1>
+      <p class="hero-sub">Выбери настроение — получи идеальный плейлист</p>
+    </div>
+    <div class="hero-visual">
+      <div class="vinyl" id="vinylDisc">
+        <div class="vinyl-hole"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mood-section">
+    <h2 class="section-title">Что ты хочешь почувствовать?</h2>
+    <div class="mood-grid">
+      <button class="mood-card" data-mood="happy" onclick="selectMood(this)">
+        <span class="mood-emoji">😄</span>
+        <span class="mood-label">Радость</span>
+      </button>
+      <button class="mood-card" data-mood="sad" onclick="selectMood(this)">
+        <span class="mood-emoji">😢</span>
+        <span class="mood-label">Грусть</span>
+      </button>
+      <button class="mood-card" data-mood="energetic" onclick="selectMood(this)">
+        <span class="mood-emoji">⚡</span>
+        <span class="mood-label">Энергия</span>
+      </button>
+      <button class="mood-card" data-mood="calm" onclick="selectMood(this)">
+        <span class="mood-emoji">🌿</span>
+        <span class="mood-label">Спокойствие</span>
+      </button>
+      <button class="mood-card" data-mood="romantic" onclick="selectMood(this)">
+        <span class="mood-emoji">💖</span>
+        <span class="mood-label">Романтика</span>
+      </button>
+      <button class="mood-card" data-mood="focused" onclick="selectMood(this)">
+        <span class="mood-emoji">🎯</span>
+        <span class="mood-label">Сосредоточенность</span>
+      </button>
+      <button class="mood-card" data-mood="angry" onclick="selectMood(this)">
+        <span class="mood-emoji">🔥</span>
+        <span class="mood-label">Ярость</span>
+      </button>
+      <button class="mood-card" data-mood="nostalgic" onclick="selectMood(this)">
+        <span class="mood-emoji">🌅</span>
+        <span class="mood-label">Ностальгия</span>
+      </button>
+    </div>
+  </div>
+
+
+  <div class="genre-section" id="genreBlock" style="display:block">
+    <h2 class="section-title">Предпочитаемый жанр</h2>
+    <div class="genre-chips">
+      <button class="genre-chip" data-genre="pop" onclick="toggleGenre(this)">Pop</button>
+      <button class="genre-chip" data-genre="rock" onclick="toggleGenre(this)">Rock</button>
+      <button class="genre-chip" data-genre="jazz" onclick="toggleGenre(this)">Jazz</button>
+      <button class="genre-chip" data-genre="classical" onclick="toggleGenre(this)">Classical</button>
+      <button class="genre-chip" data-genre="electronic" onclick="toggleGenre(this)">Electronic</button>
+      <button class="genre-chip" data-genre="hiphop" onclick="toggleGenre(this)">Hip-Hop</button>
+      <button class="genre-chip" data-genre="rnb" onclick="toggleGenre(this)">R&B</button>
+      <button class="genre-chip" data-genre="indie" onclick="toggleGenre(this)">Indie</button>
+      <button class="genre-chip" data-genre="metal" onclick="toggleGenre(this)">Metal</button>
+      <button class="genre-chip" data-genre="folk" onclick="toggleGenre(this)">Folk</button>
+    </div>
+    <button class="btn-get-recs" onclick="getRecommendations()">
+      🎵 Подобрать музыку
+    </button>
+  </div>
+
+
+  <div id="recsSection" class="recs-section" style="display:none">
+    <div class="recs-header">
+      <h2 class="section-title">Рекомендации для тебя</h2>
+      <button class="btn-small" onclick="getRecommendations()">🔄 Обновить</button>
+    </div>
+    <div id="recsList" class="recs-list"></div>
+  </div>
+</section>
+
+
+<section id="profile" class="section">
+  <div class="page-header">
+    <h2 class="page-title">Мой профиль</h2>
+  </div>
+  <div id="profileContent">
+    <div class="auth-prompt">
+      <div class="auth-icon">👤</div>
+      <p>Войдите, чтобы настроить профиль и сохранять предпочтения</p>
+      <button class="btn-accent" onclick="openModal('loginModal')">Войти / Зарегистрироваться</button>
+    </div>
+  </div>
+<div id="profileForm" style="display:none">
+  <div class="profile-card">
+    <h3>Мои музыкальные предпочтения</h3>
+
+    <div class="form-group">
+      <label>Любимые жанры</label>
+
+      <div class="genre-chips" id="profileGenres">
+        <button class="genre-chip" data-genre="pop" onclick="toggleProfileGenre(this)">Pop</button>
+        <button class="genre-chip" data-genre="rock" onclick="toggleProfileGenre(this)">Rock</button>
+        <button class="genre-chip" data-genre="jazz" onclick="toggleProfileGenre(this)">Jazz</button>
+        <button class="genre-chip" data-genre="classical" onclick="toggleProfileGenre(this)">Classical</button>
+        <button class="genre-chip" data-genre="electronic" onclick="toggleProfileGenre(this)">Electronic</button>
+        <button class="genre-chip" data-genre="hiphop" onclick="toggleProfileGenre(this)">Hip-Hop</button>
+        <button class="genre-chip" data-genre="rnb" onclick="toggleProfileGenre(this)">R&B</button>
+        <button class="genre-chip" data-genre="indie" onclick="toggleProfileGenre(this)">Indie</button>
+        <button class="genre-chip" data-genre="metal" onclick="toggleProfileGenre(this)">Metal</button>
+        <button class="genre-chip" data-genre="folk" onclick="toggleProfileGenre(this)">Folk</button>
+      </div>
+    </div>
+
+      <button class="btn-accent" onclick="saveProfile()">💾 Сохранить предпочтения</button>
+    </div>
+  </div>
+  </section>
+  <section id="history" class="section">
+    <div class="page-header">
+      <h2 class="page-title">История прослушиваний</h2>
+      <button class="btn-small danger" onclick="clearHistory()">🗑 Очистить</button>
+    </div>
+    <div id="historyList" class="track-list-empty">
+      <div class="empty-icon">🎧</div>
+      <p>История пуста — выбери настроение и начни слушать!</p>
+    </div>
+</section>
+
+
+<section id="favorites" class="section">
+  <div class="page-header">
+    <h2 class="page-title">Избранное</h2>
+  </div>
+  <div id="favoritesList" class="track-list-empty">
+    <div class="empty-icon">❤️</div>
+    <p>Нет избранных треков. Нажми ♡ рядом с треком, чтобы добавить!</p>
+  </div>
+</section>
+
+
+<div class="player-bar" id="playerBar" style="display:none">
+  <div class="player-info">
+    <div class="player-cover" id="playerCover">🎵</div>
+    <div>
+      <div class="player-track" id="playerTrack">—</div>
+      <div class="player-artist" id="playerArtist">—</div>
+    </div>
+  </div>
+  <div class="player-controls">
+    <button class="ctrl-btn" onclick="prevTrack()">⏮</button>
+    <button class="ctrl-btn play" id="playBtn" onclick="togglePlay()">▶</button>
+    <button class="ctrl-btn" onclick="nextTrack()">⏭</button>
+  </div>
+  <div class="player-right">
+    <input type="range" class="volume" id="volumeSlider" min="0" max="100" value="70">
+    <button class="ctrl-btn" onclick="toggleLike()">♡</button>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="loginModal" onclick="closeModalOutside(event, 'loginModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Войти</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Регистрация</button>
+    </div>
+
+
+    <div id="loginForm">
+      <h3 class="modal-title">Добро пожаловать</h3>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="input" id="loginEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" class="input" id="loginPassword" placeholder="••••••••">
+      </div>
+      <div id="loginError" class="error-msg" style="display:none"></div>
+      <button class="btn-accent full" onclick="login()">Войти</button>
+    </div>
+
+
+    <div id="registerForm" style="display:none">
+      <h3 class="modal-title">Создать аккаунт</h3>
+      <div class="form-group">
+        <label>Имя</label>
+        <input type="text" class="input" id="regName" placeholder="Как тебя зовут?">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="input" id="regEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" class="input" id="regPassword" placeholder="Минимум 6 символов">
+      </div>
+      <div id="regError" class="error-msg" style="display:none"></div>
+      <button class="btn-accent full" onclick="register()">Зарегистрироваться</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
